@@ -8,6 +8,9 @@
 alias ls='ls --color=auto'
 
 
+set -o vi
+
+
 function section_end {
 	if [ "$__last_color" == "$2" ]; then
 		# Section colors are the same, use a foreground separator
@@ -86,16 +89,16 @@ function history_module {
 # arg: $1 foreground color
 # arg: $2 background color
 function ssh_module {
-    local bg_color=$1
-    local fg_color=$2
-    if [ "$SSH_TTY" = "" ]; then
-        local content=""
-    else
-        local content="${symbols[ssh_connected]}"
-        PS1+=$(section_end $fg_color $bg_color)
-        PS1+=$(section_content $fg_color $bg_color " $content ")
-        __last_color=$bg_color
-    fi
+	local bg_color=$1
+	local fg_color=$2
+	if [ "$SSH_TTY" = "" ]; then
+		local content=""
+	else
+		local content="${symbols[ssh_connected]}"
+		PS1+=$(section_end $fg_color $bg_color)
+		PS1+=$(section_content $fg_color $bg_color " $content ")
+		__last_color=$bg_color
+	fi
 }
 
 # -----------------------------------------------------------------------------
@@ -229,19 +232,19 @@ function git_stash_module {
 # arg: $1 foreground color
 # arg; $2 background color
 function git_ahead_behind_module {
-    local number_behind_ahead=$(git rev-list --count --left-right '@{upstream}...HEAD' 2>/dev/null)
-    local number_ahead="${number_behind_ahead#*	}"
-    local number_behind="${number_behind_ahead%	*}"
-    if [ ! "0$number_ahead" -eq 0 -o ! "0$number_behind" -eq 0 ]; then
+	local number_behind_ahead=$(git rev-list --count --left-right '@{upstream}...HEAD' 2>/dev/null)
+	local number_ahead="${number_behind_ahead#*	}"
+	local number_behind="${number_behind_ahead%	*}"
+	if [ ! "0$number_ahead" -eq 0 -o ! "0$number_behind" -eq 0 ]; then
 		local bg_color=$1
 		local fg_color=$2
-        local content=""
-        if [ ! "$number_ahead" -eq 0 ]; then
-            content+=" ${symbols[ahead]} $number_ahead"
-        fi
-        if [ ! "$number_behind" -eq 0 ]; then
-            content+=" ${symbols[behind]} $number_behind"
-        fi
+	local content=""
+	if [ ! "$number_ahead" -eq 0 ]; then
+		content+=" ${symbols[ahead]} $number_ahead"
+	fi
+	if [ ! "$number_behind" -eq 0 ]; then
+		content+=" ${symbols[behind]} $number_behind"
+	fi
 		PS1+=$(section_end $fg_color $bg_color)
 		PS1+=$(section_content $fg_color $bg_color "$content ")
 		__last_color=$bg_color
@@ -418,7 +421,7 @@ else
 	'user_module               Yellow      Black       true'
 	'path_module               Blue        Black       0'
 	'read_only_module          Red         White'
-	'git_module                Purple      Black       Red'
+	'git_module                Purple      Black       Black'
 	'git_ahead_behind_module   Purple      Black'
 	)
 fi
